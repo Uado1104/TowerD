@@ -191,7 +191,7 @@
     "_priority": 6553,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 445.2413793103449,
+    "_orthoHeight": 586.3573085846868,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -1421,7 +1421,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 153.7340887661638,
+      "width": 153.740234375,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -1454,7 +1454,7 @@
     "_string": "Loading...",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 42.291666666666664,
+    "_actualFontSize": 35,
     "_fontSize": 35,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
@@ -1635,7 +1635,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 239.9834573679957,
+      "width": 240,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -1668,7 +1668,7 @@
     "_string": "点击屏幕开始",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
-    "_actualFontSize": 48.33333333333333,
+    "_actualFontSize": 40,
     "_fontSize": 40,
     "_fontFamily": "Arial",
     "_lineHeight": 40,
