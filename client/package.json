@@ -1,0 +1,17 @@
+{
+  "name": "tgx",
+  "uuid": "b5bd1782-fd44-4a60-88d9-8e3f7468b388",
+  "creator": {
+    "version": "3.8.4"
+  },
+  "scripts": {
+    "postinstall": "cd ../server && npm i && npm run sync"
+  },
+  "description": "StickerIO made with TGX",
+  "dependencies": {
+    "tsrpc-browser": "^3.4.16",
+    "tsrpc-miniapp": "^3.4.16"
+  },
+  "_sourceId": "9f97a2fc-568d-427f-ac1f-056f2d4f43f2",
+  "_storeId": "9809fda0d7cd4e0e07202ac15284514b"
+}

@@ -1,0 +1,36 @@
+{
+  "name": "backend",
+  "version": "0.1.0",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "dev:start": "cross-env server_name=game-server-1 tsrpc-cli dev --entry src/ServerLauncher.ts",
+    "dev:server2": "cross-env server_name=game-server-2 tsrpc-cli dev --entry src/ServerLauncher.ts",
+    "dist:server1": "node ./ServerLauncher.js --server_name=game-server-1",
+    "dist:server2": "node ./ServerLauncher.js --server_name=game-server-2",
+    "build": "node ./scripts/build.js",
+    "tsrpc-build": "tsrpc-cli build",
+    "doc": "tsrpc-cli doc",
+    "test": "mocha test/**/*.test.ts",
+    "proto": "tsrpc-cli proto",
+    "sync": "tsrpc-cli sync",
+    "api": "tsrpc-cli api"
+  },
+  "devDependencies": {
+    "@types/mocha": "^8.2.3",
+    "@types/node": "^15.14.9",
+    "@types/uuid": "^8.3.4",
+    "cross-env": "^7.0.3",
+    "mocha": "^9.2.2",
+    "onchange": "^7.1.0",
+    "ts-node": "^10.7.0",
+    "tsrpc-cli": "^2.4.5",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "mongoose": "^8.2.0",
+    "tsrpc": "^3.4.16",
+    "uuid": "^8.3.2"
+  }
+}
