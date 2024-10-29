@@ -139,4 +139,7 @@ export class UITeam extends tgx.UIController {
             });
         }
     }
+
+    private async enterGame() {}
+        
 }

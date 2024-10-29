@@ -9,7 +9,7 @@ export class ModuleDef {
      * @en game bundle, used for game scene and common ui
      * @zh 用于存放游戏场景相关的素材
      */
-    public static GAME = 'module_game';
+    public static GAME = 'module_td';
 
     /**
      * @en game bundle, used for game scene and common ui

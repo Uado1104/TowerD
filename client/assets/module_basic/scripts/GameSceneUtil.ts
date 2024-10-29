@@ -20,6 +20,8 @@ export class GameSceneUtil {
     }
 
     public async enterGame(params: GameServerAuthParams,silence:boolean = false) {
+
+        // 改成直接加载游戏场景
         this._stage = 'normal';
         if(!silence){
             tgx.UIWaiting.show('正在加载');

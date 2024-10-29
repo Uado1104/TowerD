@@ -26,5 +26,5 @@ export class SceneDef {
      * @en game scene
      * @zh 游戏场景
      **/
-    public static GAME = { name: 'game_normal', bundle: ModuleDef.GAME };
+    public static GAME = { name: 'game', bundle: ModuleDef.GAME };
 }
