@@ -3,12 +3,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('tgxFPSCamera')
 export class FPSCamera extends Component {
-    start() {
+  start() {}
 
-    }
-
-    update(deltaTime: number) {
-        
-    }
+  update(deltaTime: number) {}
 }
-
