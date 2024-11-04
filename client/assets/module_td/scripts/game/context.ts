@@ -1,0 +1,3 @@
+class globalContext {
+  constructor() {}
+}

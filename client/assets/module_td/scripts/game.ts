@@ -1,15 +1,16 @@
 import { _decorator, Component, Node } from 'cc';
+import { ECSWorld } from './game/ecs/ECSWorld';
 const { ccclass, property } = _decorator;
 
 @ccclass('game')
 export class game extends Component {
-    start() {
-        console.log('game start');
-    }
+  private ECSWorld: ECSWorld = new ECSWorld(100);
 
-    update(deltaTime: number) {
-        
-    }
+  start() {
+    console.log('game start');
+  }
+
+  update(deltaTime: number) {
+    ECSWorld.Tick(deltaTime);
+  }
 }
-
-
