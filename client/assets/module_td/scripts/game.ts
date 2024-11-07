@@ -1,5 +1,5 @@
 import { _decorator, Component, Node } from 'cc';
-import { ECSWorld } from './game/ecs/ECSWorld';
+import { ECSWorld } from './core/ecs/ECSWorld';
 const { ccclass, property } = _decorator;
 
 @ccclass('game')
