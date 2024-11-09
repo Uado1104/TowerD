@@ -3,6 +3,30 @@ import { TickerManager } from '../ticker/TickerManager';
 import { DEvent } from './DEvent';
 import { IEventDispatcher } from './IEventDispatcher';
 
+
+/**
+ * 监听者
+ */
+class Listener {
+  key = '';
+  target: any | null;
+  handler: (e: DEvent) => void;
+  priority = 255;
+
+  constructor(key: string, target: any, handler: (e: DEvent) => void) {
+    this.key = key;
+    this.target = target;
+    this.handler = handler;
+  }
+
+  Destroy() {
+    this.key = null;
+    this.target = null;
+    this.handler = null;
+    this.priority = 0;
+  }
+}
+
 /**
  * 事件分发器(只有一对多的情况下去使用)
  */
@@ -211,28 +235,5 @@ export class EventDispatcher implements IEventDispatcher {
   Destroy(): void {
     this.callerMap.clear();
     this.keyMap.clear();
-  }
-}
-
-/**
- * 监听者
- */
-class Listener {
-  key = '';
-  target: any | null;
-  handler: (e: DEvent) => void;
-  priority = 255;
-
-  constructor(key: string, target: any, handler: (e: DEvent) => void) {
-    this.key = key;
-    this.target = target;
-    this.handler = handler;
-  }
-
-  Destroy() {
-    this.key = null;
-    this.target = null;
-    this.handler = null;
-    this.priority = 0;
   }
 }
