@@ -7,7 +7,7 @@ import { SceneDef } from '../../scripts/SceneDef';
 
 export class GameSceneUtil {
   private static _inst: GameSceneUtil;
-  public static get inst(): GameSceneUtil {
+  static get inst(): GameSceneUtil {
     if (!this._inst) {
       this._inst = new GameSceneUtil();
     }
@@ -15,11 +15,11 @@ export class GameSceneUtil {
   }
 
   private _stage = 'lobby';
-  public get stage(): string {
+  get stage(): string {
     return this._stage;
   }
 
-  public async enterGame(params: GameServerAuthParams, silence = false) {
+  async enterGame(params: GameServerAuthParams, silence = false) {
     // 改成直接加载游戏场景
     this._stage = 'normal';
     if (!silence) {
@@ -34,7 +34,7 @@ export class GameSceneUtil {
     await tgx.SceneUtil.loadScene(SceneDef.GAME);
   }
 
-  public exitGame() {
+  exitGame() {
     this._stage = 'lobby';
     RoomMgr.inst.reset();
     GameMgr.inst.reset();
