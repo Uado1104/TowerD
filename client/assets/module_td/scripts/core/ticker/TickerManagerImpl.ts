@@ -6,7 +6,7 @@ export class TickerManagerImpl implements ITickerManager {
 
   private __nextFrameCallBacks: Array<NextFrameHandler> = [];
 
-  Tick(dt: number): void {
+  tick(dt: number): void {
     let handler: NextFrameHandler;
     while (this.__nextFrameCallBacks.length) {
       handler = this.__nextFrameCallBacks.shift()!;
@@ -18,7 +18,7 @@ export class TickerManagerImpl implements ITickerManager {
     }
   }
 
-  AddTicker(value: ITicker): void {
+  addTicker(value: ITicker): void {
     const index: number = this.__tickerList.indexOf(value);
     if (index >= 0) {
       throw new Error('Ticker 重复添加！');
@@ -26,7 +26,7 @@ export class TickerManagerImpl implements ITickerManager {
     this.__tickerList.push(value);
   }
 
-  RemoveTicker(value: ITicker): void {
+  removeTicker(value: ITicker): void {
     const index: number = this.__tickerList.indexOf(value);
     if (index < 0) {
       throw new Error('找不到要删除的Tick！');
@@ -34,7 +34,7 @@ export class TickerManagerImpl implements ITickerManager {
     this.__tickerList.splice(index, 1);
   }
 
-  CallNextFrame(value: tickCallBackFunc, caller: any): void {
+  callNextFrame(value: tickCallBackFunc, caller: any): void {
     for (let index = 0; index < this.__nextFrameCallBacks.length; index++) {
       const element = this.__nextFrameCallBacks[index];
       //重复
@@ -45,7 +45,7 @@ export class TickerManagerImpl implements ITickerManager {
     this.__nextFrameCallBacks.push(new NextFrameHandler(value, caller));
   }
 
-  ClearNextFrame(value: tickCallBackFunc, caller: any): void {
+  clearNextFrame(value: tickCallBackFunc, caller: any): void {
     for (let index = 0; index < this.__nextFrameCallBacks.length; index++) {
       const element = this.__nextFrameCallBacks[index];
       //删除

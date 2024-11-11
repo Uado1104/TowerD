@@ -1,4 +1,4 @@
-import { Pool } from '../utils/Pool';
+import { Pool } from '../../../core/utils/Pool';
 import { ECSEntity } from './ECSEntity';
 import { SparseSet } from './SparseSet';
 

@@ -7,21 +7,22 @@ import { ITickerManager, tickCallBackFunc } from './ITickerManager';
  * 心跳管理器
  */
 export class TickerManager {
-  static KEY = 'drongo.TickerManager';
+  static KEY = 'towerD.TickerManager';
 
   /**
    * 心跳驱动接口
    * @param dt
    */
   static Tick(dt: number): void {
-    this.impl.Tick(dt);
+    console.log('TickerManager Tick');
+    this.impl.tick(dt);
   }
   /**
    * 添加
    * @param value
    */
   static AddTicker(value: ITicker): void {
-    this.impl.AddTicker(value);
+    this.impl.addTicker(value);
   }
 
   /**
@@ -29,7 +30,7 @@ export class TickerManager {
    * @param value
    */
   static RemoveTicker(value: ITicker): void {
-    this.impl.RemoveTicker(value);
+    this.impl.removeTicker(value);
   }
 
   /**
@@ -37,7 +38,7 @@ export class TickerManager {
    * @param value
    */
   static CallNextFrame(value: tickCallBackFunc, caller: any): void {
-    this.impl.CallNextFrame(value, caller);
+    this.impl.callNextFrame(value, caller);
   }
 
   /**
@@ -46,7 +47,7 @@ export class TickerManager {
    * @param caller
    */
   static ClearNextFrame(value: tickCallBackFunc, caller: any): void {
-    this.impl.ClearNextFrame(value, caller);
+    this.impl.clearNextFrame(value, caller);
   }
 
   private static __impl: ITickerManager;
