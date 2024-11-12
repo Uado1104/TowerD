@@ -105,7 +105,7 @@ export class UITeam extends tgx.UIController {
   async startMatch(type: string) {
     this.layout.btnMatch.node.active = false;
     this.layout.lblTips.node.active = true;
-    const ret = await LobbyMgr.inst.rpc_QuickPlay(type);
+    const ret = await LobbyMgr.inst.rpc_QuickPlay(type, true);
     if (!isValid(this.node)) {
       //@en if the node has been destroyed, it means the match has been canceled halfway
       //@zh 如果节点已被销毁，表示中途取消了匹配

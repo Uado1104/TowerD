@@ -1,4 +1,3 @@
-import { director } from 'cc';
 import { SceneDef } from '../../scripts/SceneDef';
 import { HttpLobbyServer, NetLobbyServer, lobbyNet, loginNet } from './NetGameServer';
 import { GameSceneUtil } from './GameSceneUtil';
@@ -88,9 +87,8 @@ export class LobbyMgr {
     if (!UserMgr.inst.name) {
       tgx.UIWaiting.show('角色准备中');
       await tgx.SceneUtil.loadScene(SceneDef.CREATE_ROLE);
-    }
-    //如果角色在房间中，则进入房间
-    else if (ret.res.roomId) {
+    } else if (ret.res.roomId) {
+      //如果角色在房间中，则进入房间
       const ret2 = await this.doTryEnterRoom(ret.res.roomId);
       if (!ret2.isSucc) {
         //进入大厅
