@@ -19,7 +19,19 @@ export class GameSceneUtil {
     return this._stage;
   }
 
+  async enterGameLocally() {
+    // 改成直接加载游戏场景
+    // 改成直接加载游戏场景
+    this._stage = 'normal';
+    await tgx.SceneUtil.loadBundleSync(ModuleDef.GAME);
+
+    RoomMgr.inst.reset();
+    GameMgr.inst.reset();
+    await tgx.SceneUtil.loadScene(SceneDef.GAME);
+  }
+
   async enterGame(params: GameServerAuthParams, silence = false) {
+    // 改成直接加载游戏场景
     // 改成直接加载游戏场景
     this._stage = 'normal';
     if (!silence) {
@@ -31,7 +43,18 @@ export class GameSceneUtil {
     GameMgr.inst.reset();
 
     await gameNet.connectToRoomServer(params);
-    await tgx.SceneUtil.loadScene(SceneDef.GAME);
+    const ret = await RoomMgr.inst.enterRoom(params);
+    if (ret.isSucc) {
+      const loadRet = await tgx.SceneUtil.loadScene(SceneDef.GAME);
+      if (loadRet && lobbyNet.type != 'http') {
+        (lobbyNet as NetLobbyServer).disconnect(3000, 'normal');
+      }
+    } else {
+      if (ret.err.message == 'INVALID_CALL' || ret.err.message == 'not_login') {
+        RoomMgr.inst.backToLobby();
+      }
+    }
+    return ret;
   }
 
   exitGame() {

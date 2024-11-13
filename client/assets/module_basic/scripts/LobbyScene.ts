@@ -6,6 +6,8 @@ import { UIAnnouncement } from '../ui_announcement/UIAnnouncement';
 import { UITeam } from '../ui_team/UITeam';
 import { lobbyNet } from './NetGameServer';
 import { UIChat } from '../ui_chat/UIChat';
+import { LobbyMgr } from './LobbyMgr';
+import { UIGameMatching } from '../ui_game_matching/UIGameMatching';
 const { ccclass, property } = _decorator;
 
 @ccclass('LobbyScene')
@@ -38,7 +40,18 @@ export class LobbyScene extends Component {
     tgx.UIAlert.show('暂无可用皮肤');
   }
 
-  onBtnMatchClicked() {
+  async onBtnMatchClicked() {
+    await GameSceneUtil.inst.enterGameLocally();
+    return;
+    const ret = await LobbyMgr.inst.rpc_QuickPlay('', true);
+    if (ret.isSucc) {
+      tgx.UIAlert.show('未找到适合的对手');
+    } else {
+      tgx.UIMgr.inst.showUI(UIGameMatching, async (ui: UIGameMatching) => {
+        const params = ret.res;
+        await GameSceneUtil.inst.enterGame(params, true);
+      });
+    }
     tgx.UIMgr.inst.showUI(UITeam);
   }
 

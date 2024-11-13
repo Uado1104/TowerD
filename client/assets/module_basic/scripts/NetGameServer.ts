@@ -69,14 +69,14 @@ export class HttpLobbyServer {
 }
 
 export class NetGameServer extends WebsocketClient {
-  public authParams: GameServerAuthParams;
-  public async connectToRoomServer(params: GameServerAuthParams) {
+  authParams: GameServerAuthParams;
+  async connectToRoomServer(params: GameServerAuthParams) {
     this.authParams = params;
     this.createConnection([params.serverUrl]);
     return true;
   }
 
-  public async joinRoomServer(uid: string) {
+  async joinRoomServer(uid: string) {
     const retJoin = await this.conn.callApi('game/AuthClient', {
       sign: this.authParams.token,
       uid: uid,
