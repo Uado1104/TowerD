@@ -121,7 +121,6 @@ export class LobbyMgr {
     } else {
       tgx.UIAlert.show(ret.err.message);
     }
-
     return ret;
   }
 

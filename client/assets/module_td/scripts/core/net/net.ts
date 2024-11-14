@@ -1,7 +1,13 @@
-export interface gameNetBase {}
+export interface Command<T, K> {
+    data: T;
+    execute(): Promise<K>;
+}
 
-export class gameNet implements gameNetBase {
-    constructor() {
-        console.log('gameNet constructor');
+export class CommandBase<T, K> implements Command<T, K> {
+    data: T;
+    async execute(): Promise<K> {
+        throw new Error('Method not implemented.');
     }
 }
+
+export 
