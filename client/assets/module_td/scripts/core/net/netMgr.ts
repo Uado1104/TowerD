@@ -1,34 +1,34 @@
 import { Command } from "./net";
 
-interface GameplayStrategy {
+interface GameplayNetController {
     handleCommand<T, K>(command: Command<T, K>): Promise<K>;
 }
 
-class SinglePlayerStrategy implements GameplayStrategy {
+class SinglePlayerNetController implements GameplayNetController {
     async handleCommand<T, K>(command: Command<T, K>) {
         return command.execute(); // Executes commands directly
     }
 }
 
-class MultiplayerStrategy implements GameplayStrategy {
+class MultiplayerNetController implements GameplayNetController {
     async handleCommand<T, K>(command: Command<T, K>) {
         return command.execute(); // Executes commands directly
     }
 }
 
-export class GameFacade {
-    static readonly gameplaySingleStrategy = new SinglePlayerStrategy();
+export class NetController {
+    static readonly singleController = new SinglePlayerNetController();
 
-    static readonly gameplayMultiStrategy = new MultiplayerStrategy();
+    static readonly multiplayerController = new MultiplayerNetController();
   
-    static isSinglePlayer: boolean;
+    static isOffline: boolean = true;
 
-    static get strategy() {
-        return this.isSinglePlayer ? this.gameplaySingleStrategy : this.gameplayMultiStrategy;
+    static get controller() {
+        return this.isOffline ? this.singleController : this.multiplayerController;
     }
 
     static performAction<T, K>(command: Command<T, K>) {
-        return GameFacade.strategy.handleCommand(command);
+        return NetController.controller.handleCommand(command);
     }
   }
   

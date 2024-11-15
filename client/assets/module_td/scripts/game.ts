@@ -1,5 +1,5 @@
 import { _decorator, Component, Node } from 'cc';
-import { TickerManager } from './core/ticker/TickerManager';
+import { TickSystem } from './core/ticker/TickerManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('game')
@@ -9,6 +9,6 @@ export class game extends Component {
   }
 
   update(deltaTime: number) {
-    TickerManager.Tick(deltaTime);
+    TickSystem.Tick(deltaTime);
   }
 }

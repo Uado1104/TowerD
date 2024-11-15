@@ -1,6 +1,26 @@
 import { ITicker } from './ITicker';
 import { ITickerManager, tickCallBackFunc } from './ITickerManager';
 
+class NextFrameHandler {
+  callBack: tickCallBackFunc;
+  caller: any;
+
+  constructor(callBack: tickCallBackFunc, caller: any) {
+    this.callBack = callBack;
+    this.caller = caller;
+  }
+
+  Equal(callBack: tickCallBackFunc, caller: any): boolean {
+    if (this.caller !== caller) {
+      return false;
+    }
+    if (this.callBack !== callBack) {
+      return false;
+    }
+    return true;
+  }
+}
+
 export class TickerManagerImpl implements ITickerManager {
   private __tickerList: Array<ITicker> = [];
 
@@ -53,25 +73,5 @@ export class TickerManagerImpl implements ITickerManager {
         this.__nextFrameCallBacks.splice(index, 1);
       }
     }
-  }
-}
-
-class NextFrameHandler {
-  callBack: tickCallBackFunc;
-  caller: any;
-
-  constructor(callBack: tickCallBackFunc, caller: any) {
-    this.callBack = callBack;
-    this.caller = caller;
-  }
-
-  Equal(callBack: tickCallBackFunc, caller: any): boolean {
-    if (this.caller !== caller) {
-      return false;
-    }
-    if (this.callBack !== callBack) {
-      return false;
-    }
-    return true;
   }
 }

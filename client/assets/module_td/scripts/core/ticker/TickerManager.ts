@@ -6,7 +6,7 @@ import { ITickerManager, tickCallBackFunc } from './ITickerManager';
 /**
  * 心跳管理器
  */
-export class TickerManager {
+export class TickSystem {
   static KEY = 'towerD.TickerManager';
 
   /**
@@ -14,7 +14,6 @@ export class TickerManager {
    * @param dt
    */
   static Tick(dt: number): void {
-    console.log('TickerManager Tick');
     this.impl.tick(dt);
   }
   /**

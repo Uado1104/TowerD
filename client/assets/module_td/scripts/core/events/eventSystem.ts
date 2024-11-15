@@ -1,4 +1,4 @@
-import { TickerManager } from '../ticker/TickerManager';
+import { TickSystem } from '../ticker/TickerManager';
 import { DEvent } from './DEvent';
 
 export type TEventHandle = (...args: any[]) => void;
@@ -77,7 +77,7 @@ export class EventDispatcher<
     }
     const evt = DEvent.create(type as string, params);
     this.needEmit.push(evt);
-    TickerManager.CallNextFrame(this.__emit, this);
+    TickSystem.CallNextFrame(this.__emit, this);
   }
 
   /**

@@ -9,5 +9,3 @@ export class CommandBase<T, K> implements Command<T, K> {
         throw new Error('Method not implemented.');
     }
 }
-
-export 
