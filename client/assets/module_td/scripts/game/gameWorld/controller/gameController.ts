@@ -1,84 +1,18 @@
-interface GameController {
-    init(): void;
+import { TickSystem } from '../../../core/ticker/TickerManager';
+import { GameSessionController } from './sessionController';
 
-    pause(): void;
+export class GameWorldController {
+  static gameSessionController = new GameSessionController();
 
-    resume(): void;
+  private static ticker = {
+    Tick: GameWorldController.gameSessionController.tick,
+  };
 
-    end(): void;
+  static init() {
+    TickSystem.AddTicker(GameWorldController.ticker);
+  }
 
-    tick(dt: number): void;
-}
-
-export class GameWaveController {
-    
-    start() {
-        // Start the wave
-    }
-
-    pause() {
-        // Pause the wave
-    }
-
-    resume() {
-        // Resume the wave
-    }
-
-    end() {
-        // End the wave
-    }
-
-    tick() {
-
-    }
-}
-
-export class GameRoundController {
-
-    private waveController = new GameWaveController();
-
-    start() {
-        // Start the round
-    }
-
-    pause() {
-        // Pause the round
-    }
-
-    resume() {
-        // Resume the round
-    }
-
-    end() {
-        // End the round
-    }
-
-    tick() {
-
-    }
-}
-
-export class GameSessionController implements GameController {
-
-    private roundController = new GameRoundController();
-
-    init() {
-        // Start the game
-    }
-
-    pause() {
-        // Pause the game
-    }
-
-    resume() {
-        // Resume the game
-    }
-
-    end() {
-        // End the game
-    }
-
-    tick() {
-
-    }
+  static clear() {
+    TickSystem.RemoveTicker(GameWorldController.ticker);
+  }
 }
