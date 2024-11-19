@@ -1,5 +1,5 @@
 import { _decorator, Component, Node } from 'cc';
-import { TickSystem } from './core/ticker/TickerManager';
+import { TickSystem } from './core/ticker/TickerSystem';
 import { GameWorldController } from './game/gameWorld/controller/gameController';
 const { ccclass, property } = _decorator;
 

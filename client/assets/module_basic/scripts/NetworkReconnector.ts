@@ -97,7 +97,7 @@ export class NetworkReconnector extends Component {
             if (net == gameNet) {
                 console.log('game reconnecting.');
                 tgx.UIWaiting.show('正在重连');
-                let ret = await GameSceneUtil.inst.enterGame(gameNet.authParams);
+                let ret = await GameSceneUtil.instance.enterGame(gameNet.authParams);
                 if (ret.isSucc) {
                     isSucc = true;
                 }

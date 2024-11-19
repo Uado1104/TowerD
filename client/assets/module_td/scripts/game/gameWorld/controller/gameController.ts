@@ -1,4 +1,4 @@
-import { TickSystem } from '../../../core/ticker/TickerManager';
+import { TickSystem } from '../../../core/ticker/TickerSystem';
 import { GameSessionController } from './sessionController';
 
 export class GameWorldController {

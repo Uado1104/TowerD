@@ -53,7 +53,7 @@ export class UICreateRoom extends tgx.UIController {
       const password = layout.edtPassword.string;
       if (ret.isSucc) {
         const params = ret.res.enterRoomParams;
-        return await GameSceneUtil.inst.enterGame(params);
+        return await GameSceneUtil.instance.enterGame(params);
       } else {
         tgx.UIAlert.show('创建失败');
       }

@@ -1,5 +1,5 @@
 import { TickerManagerImpl } from './TickerManagerImpl';
-import { Injector } from '../../core/utils/Injector';
+import { Injector } from '../utils/Injector';
 import { ITicker } from './ITicker';
 import { ITickerManager, tickCallBackFunc } from './ITickerManager';
 

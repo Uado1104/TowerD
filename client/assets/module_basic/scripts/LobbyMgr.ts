@@ -117,7 +117,7 @@ export class LobbyMgr {
     if (ret.isSucc) {
       const params = ret.res;
       tgx.UIWaiting.show('进入世界');
-      return await GameSceneUtil.inst.enterGame(params);
+      return await GameSceneUtil.instance.enterGame(params);
     } else {
       tgx.UIAlert.show(ret.err.message);
     }

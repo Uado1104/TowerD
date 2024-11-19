@@ -19,7 +19,7 @@ export class LobbyScene extends Component {
       return;
     }
 
-    GameSceneUtil.inst.exitGame();
+    GameSceneUtil.instance.exitGame();
 
     tgx.UIMgr.inst.closeAll();
 
@@ -41,7 +41,7 @@ export class LobbyScene extends Component {
   }
 
   async onBtnMatchClicked() {
-    await GameSceneUtil.inst.enterGameLocally();
+    await GameSceneUtil.instance.enterGameLocally();
     return;
     const ret = await LobbyMgr.inst.rpc_QuickPlay('', true);
     if (ret.isSucc) {
@@ -49,7 +49,7 @@ export class LobbyScene extends Component {
     } else {
       tgx.UIMgr.inst.showUI(UIGameMatching, async (ui: UIGameMatching) => {
         const params = ret.res;
-        await GameSceneUtil.inst.enterGame(params, true);
+        await GameSceneUtil.instance.enterGame(params, true);
       });
     }
     tgx.UIMgr.inst.showUI(UITeam);

@@ -7,7 +7,7 @@ import { SceneDef } from '../../scripts/SceneDef';
 
 export class GameSceneUtil {
   private static _inst: GameSceneUtil;
-  static get inst(): GameSceneUtil {
+  static get instance(): GameSceneUtil {
     if (!this._inst) {
       this._inst = new GameSceneUtil();
     }

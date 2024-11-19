@@ -1,4 +1,4 @@
-import { TickSystem } from '../ticker/TickerManager';
+import { TickSystem } from '../ticker/TickerSystem';
 import { DEvent } from './DEvent';
 
 export type TEventHandle = (...args: any[]) => void;

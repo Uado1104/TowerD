@@ -125,7 +125,7 @@ export class UITeam extends tgx.UIController {
       //@zh 进入游戏，并显示等待其他玩家界面
       const params = ret.res;
       tgx.UIMgr.inst.showUI(UIGameMatching, async (ui: UIGameMatching) => {
-        await GameSceneUtil.inst.enterGame(params, true);
+        await GameSceneUtil.instance.enterGame(params, true);
       });
     }
   }
