@@ -1,12 +1,12 @@
 import { _decorator, Component, Node } from 'cc';
 import { TickSystem } from './core/ticker/TickerSystem';
-import { GameWorldController } from './game/gameWorld/controller/gameController';
+import { GameProcessController } from './game/gameWorld/controller/gameProcessController';
 const { ccclass, property } = _decorator;
 
 @ccclass('game')
 export class game extends Component {
   start() {
-    GameWorldController.init();
+    GameProcessController.start();
   }
 
   update(deltaTime: number) {
@@ -14,6 +14,6 @@ export class game extends Component {
   }
 
   stop() {
-    GameWorldController.clear();
+    GameProcessController.stop();
   }
 }

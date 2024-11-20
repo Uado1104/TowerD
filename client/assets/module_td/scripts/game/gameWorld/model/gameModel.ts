@@ -1,5 +1,5 @@
 import { ECSWorld } from '../ecs/ECSWorld';
 
 export class GameModel {
-  static readonly gameEcsWorld = new ECSWorld(10000);
+  static readonly gameWorld = new ECSWorld(1000);
 }

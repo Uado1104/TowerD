@@ -12,8 +12,13 @@ export class DEvent {
    */
   data: any;
 
-  constructor(type: string, data?: any) {
-    this.init(type, data);
+  /**
+   * 构造函数
+   */
+  callback: any;
+
+  constructor(type: string, data?: any, caller?: any) {
+    this.init(type, data, caller);
   }
 
   /**
@@ -24,9 +29,10 @@ export class DEvent {
    * @param err
    * @param progress
    */
-  init(type: string, data?: any): void {
+  init(type: string, data?: any, caller?: any): void {
     this.type = type;
     this.data = data;
+    this.callback = caller;
   }
 
   reset(): void {
@@ -47,13 +53,13 @@ export class DEvent {
    * @param err
    * @param progress
    */
-  static create(type: string, data?: any): DEvent {
+  static create(type: string, data?: any, caller?: any): DEvent {
     let result: DEvent;
     if (this.__pool.length > 0) {
       result = this.__pool.pop() as DEvent;
-      result.init(type, data);
+      result.init(type, data, caller);
     } else {
-      result = new DEvent(type, data);
+      result = new DEvent(type, data, caller);
     }
     return result;
   }

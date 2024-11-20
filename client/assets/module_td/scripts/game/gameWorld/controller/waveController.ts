@@ -1,6 +1,8 @@
 import { GameControllerBase } from '../../../core/controller/gameController';
 
 export class GameWaveController extends GameControllerBase {
+  readonly key = 'waveController';
+
   protected onStart(): void {}
 
   protected onPause(): void {}

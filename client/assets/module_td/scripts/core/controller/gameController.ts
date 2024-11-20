@@ -1,4 +1,6 @@
 export interface IGameController {
+  key: string;
+
   start(): void;
 
   pause(): void;
@@ -10,8 +12,10 @@ export interface IGameController {
   tick(dt: number): void;
 }
 
-export abstract class GameControllerBase {
-  constructor(protected childController?: IGameController) {}
+export abstract class GameControllerBase implements IGameController {
+  constructor(protected childControllers?: IGameController[]) {}
+
+  abstract readonly key: string;
 
   private myIsPaused = false;
 
@@ -30,7 +34,7 @@ export abstract class GameControllerBase {
       return;
     }
     this.myIsPaused = true;
-    this.childController?.pause();
+    this.childControllers?.forEach((e) => e.pause());
     this.onPause();
   }
 
@@ -39,7 +43,7 @@ export abstract class GameControllerBase {
       return;
     }
     this.onResume();
-    this.childController?.resume();
+    this.childControllers?.forEach((e) => e.resume());
     this.myIsPaused = false;
   }
 
@@ -48,7 +52,7 @@ export abstract class GameControllerBase {
       return;
     }
     this.myIsStarted = false;
-    this.childController?.end();
+    this.childControllers?.forEach((e) => e.end());
     this.onEnd();
   }
 
@@ -57,7 +61,7 @@ export abstract class GameControllerBase {
       return;
     }
     this.onTick(dt);
-    this.childController?.tick(dt);
+    this.childControllers?.forEach((e) => e.tick(dt));
   }
 
   protected abstract onStart(): void;
