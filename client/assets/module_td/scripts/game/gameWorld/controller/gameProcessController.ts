@@ -10,12 +10,15 @@ export class GameProcessController {
   };
 
   static start() {
-    GameStrategy.init();
+    // 初始化各种模块
+    // 获取数据并设置数据
+
+    GameStrategy.excute('getSessionConfig');
     TickSystem.AddTicker(GameProcessController.ticker);
   }
 
   static stop() {
     TickSystem.RemoveTicker(GameProcessController.ticker);
-    GameStrategy.destroy();
+    GameStrategy.stop();
   }
 }
