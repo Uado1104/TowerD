@@ -19,6 +19,6 @@ export class GameProcessController {
 
   static stop() {
     TickSystem.RemoveTicker(GameProcessController.ticker);
-    GameStrategy.stop();
+    GameStrategy.destroy();
   }
 }

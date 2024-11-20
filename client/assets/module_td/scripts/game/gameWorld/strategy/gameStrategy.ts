@@ -13,11 +13,11 @@ export class GameStrategy {
     return this.myGameStrategy;
   }
 
-  static start(isSinglePlayer = true) {
+  static init(isSinglePlayer = true) {
     this.myGameStrategy = isSinglePlayer ? new SinglePlayerStrategy() : new MultiPlayerStrategy();
   }
 
-  static stop() {
+  static destroy() {
     this.myGameStrategy = undefined;
   }
 

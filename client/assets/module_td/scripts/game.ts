@@ -8,7 +8,7 @@ const { ccclass, property } = _decorator;
 export class game extends Component {
   start() {
     // 初始化各种模块
-    GameStrategy.start();
+    GameStrategy.init();
 
     GameProcessController.start();
   }

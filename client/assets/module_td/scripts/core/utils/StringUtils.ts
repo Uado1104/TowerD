@@ -18,7 +18,6 @@ export class StringUtils {
    *  @example
    *
    *  let str:string = "here is some info '{0}' and {1}";
-   *  console.log(StringUtil.substitute(str, 15.4, true));
    */
   static Substitute(str: string, ...rest: any[]): string {
     if (str == null) return '';

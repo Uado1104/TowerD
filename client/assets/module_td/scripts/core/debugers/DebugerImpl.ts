@@ -1,5 +1,6 @@
 import { Debuger } from './Debuger';
 import { IDebuger } from './IDebuger';
+import { Logger } from './log';
 
 export class DebugerImpl implements IDebuger {
   private __logs: Map<string, Array<string>> = new Map<string, Array<string>>();
@@ -60,7 +61,7 @@ export class DebugerImpl implements IDebuger {
     const isAll = this.__debuger.has('all') ? this.__debuger.get('all') : false;
     const isOpen = this.__debuger.has(type) ? this.__debuger.get(type) : false;
     if (isAll || isOpen) {
-      console.log(data);
+      Logger.log('degugger', data);
     }
   }
 

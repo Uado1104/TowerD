@@ -1,16 +1,17 @@
+import { Logger } from '../../../core/debugers/log';
 import { TEventHandleParams } from '../../../core/events/eventSystem';
 import { IGamePlayStrategyBase, TCommand } from './commands';
 
 export class SinglePlayerStrategy extends IGamePlayStrategyBase {
   onHandleCommand(command: TCommand, ...params: TEventHandleParams<never>): void {
-    console.log('SinglePlayerStrategy.onHandleCommand', command, params);
+    Logger.log('SinglePlayerStrategy.onHandleCommand', `command: ${command}, params: ${params}`);
     switch (command) {
       case 'getSessionConfig':
-        console.log('SinglePlayerStrategy.startSession', params);
+        Logger.log('SinglePlayerStrategy.getSessionConfig', params);
         this.onGetSessionConfig(params);
         break;
       default:
-        console.warn('SinglePlayerStrategy.onHandleCommand: unknown command', command, params);
+        Logger.warn('SinglePlayerStrategy.onHandleCommand', `unknown command ${command}`);
         break;
     }
   }
