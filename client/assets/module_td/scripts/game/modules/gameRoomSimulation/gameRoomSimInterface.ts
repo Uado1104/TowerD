@@ -47,6 +47,20 @@ export interface GamePlayerSim {
 
   /** 玩家等级 */
   level: number;
+
+  /** 放置在场上的 */
+  heros: number[];
+}
+
+export interface GameCardSim {
+  /** 卡牌Id */
+  cardId: number;
+
+  /** 卡牌数量 */
+  count: number;
+
+  /** 卡牌等级 */
+  level: number;
 }
 
 export interface GameRoomSim {
@@ -56,5 +70,6 @@ export interface GameRoomSim {
   /** 玩家数据 */
   players: GamePlayerSim[];
 
-  /** 怪物数据 */
+  /** 牌池 */
+  cardPool: number[];
 }
