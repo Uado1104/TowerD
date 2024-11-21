@@ -1,5 +1,6 @@
 import { Logger } from '../../../core/debugers/log';
 import { TEventHandleParams } from '../../../core/events/eventSystem';
+import { GameRoomSimulationManager } from '../../modules/gameRoomSimulation/gameRoomSimManager';
 import { IGamePlayStrategyBase, TCommand } from './commands';
 
 export class SinglePlayerStrategy extends IGamePlayStrategyBase {
@@ -23,4 +24,12 @@ export class SinglePlayerStrategy extends IGamePlayStrategyBase {
   private onGetSessionConfig(session: number) {}
 
   private onStartSession() {}
+
+  constructor() {
+    super();
+  }
+
+  init() {
+
+  }
 }

@@ -1,19 +1,19 @@
 import { produce } from 'immer';
 import { Logger } from '../../../core/debugers/log';
-import { GameSessionSim } from './gameRoomSimInterface';
+import { GameRoomSim, GameSessionSim } from './gameRoomSimInterface';
 
 export class GameRoomSimModel {
   constructor() {
     Logger.log('GameRoomSimModel', 'GameRoomSimModel constructor');
   }
 
-  private myData: GameSessionSim | undefined;
+  private myData: GameRoomSim | undefined;
 
-  init(data: GameSessionSim) {
+  init(data: GameRoomSim) {
     this.myData = data;
   }
 
-  get data(): GameSessionSim {
+  get data(): GameRoomSim {
     if (!this.myData) {
       Logger.error('GameRoomSimModel', 'data is undefined');
       throw new Error('data is undefined');

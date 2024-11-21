@@ -37,7 +37,8 @@ export interface GameRoundSim {
 export interface GameSessionSim {
   /** 当前回合 */
   currentRound: number;
-  /** 怪物回合 */
+
+  /** 回合数据 */
   rounds: GameRoundSim[];
 }
 
@@ -49,7 +50,27 @@ export interface GamePlayerSim {
   level: number;
 
   /** 放置在场上的 */
-  heros: number[];
+  heros: GameCardSim[];
+
+  /** 手牌 */
+  handCards: GameCardSim[];
+
+  buffs: number[];
+
+  /** 金币 */
+  gold: number;
+
+  /** 最大金币 */
+  maxGold: number;
+
+  /** 回合金 */
+  roundGold: number;
+
+  /** 血量 */
+  hp: number;
+
+  /** 最大血量 */
+  maxHp: number;
 }
 
 export interface GameCardSim {
@@ -61,6 +82,14 @@ export interface GameCardSim {
 
   /** 卡牌等级 */
   level: number;
+
+  /** 是否已被抽取 */
+  drawed: boolean;
+}
+
+export interface GameRelicSim {
+  /** 圣物Id */
+  relicId: number;
 }
 
 export interface GameRoomSim {
@@ -71,5 +100,20 @@ export interface GameRoomSim {
   players: GamePlayerSim[];
 
   /** 牌池 */
-  cardPool: number[];
+  cardPool: GameCardSim[];
+
+  /** 圣物池 */
+  relicPool: GameRelicSim[];
+}
+
+export function genDefaultGameRoomSim(): GameRoomSim {
+  return {
+    session: {
+      currentRound: 0,
+      rounds: [],
+    },
+    players: [],
+    cardPool: [],
+    relicPool: [],
+  };
 }
