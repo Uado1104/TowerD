@@ -1,5 +1,6 @@
 import { TickSystem } from '../../../core/ticker/TickerSystem';
-import { GameStrategy } from '../strategy/gameStrategy';
+import { GamePlayStateManager } from '../manager/gameStateManager';
+import { GameStrategyManager } from '../strategy/gameStrategy';
 import { GameSessionController } from './sessionController';
 
 export class GameProcessController {
@@ -10,15 +11,24 @@ export class GameProcessController {
   };
 
   static start() {
-    // 初始化各种模块
-    // 获取数据并设置数据
+    GamePlayStateManager.event.on('pause', GameProcessController.onPause);
+    GamePlayStateManager.event.on('resume', GameProcessController.onResume);
 
-    GameStrategy.excute('getSessionConfig');
+    // 初始化各种模块
     TickSystem.AddTicker(GameProcessController.ticker);
+    this.gameSessionController.start();
+  }
+
+  private static onPause() {
+    GameProcessController.gameSessionController.pause();
+  }
+
+  private static onResume() {
+    GameProcessController.gameSessionController.resume();
   }
 
   static stop() {
     TickSystem.RemoveTicker(GameProcessController.ticker);
-    GameStrategy.destroy();
+    GameStrategyManager.destroy();
   }
 }

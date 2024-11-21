@@ -29,6 +29,14 @@ export abstract class GameControllerBase implements IGameController {
     this.myIsStarted = true;
   }
 
+  resume() {
+    if (!this.myIsStarted) {
+      return;
+    }
+    this.onResume();
+    this.myIsPaused = false;
+  }
+
   pause() {
     if (!this.myIsStarted) {
       return;
@@ -36,15 +44,6 @@ export abstract class GameControllerBase implements IGameController {
     this.myIsPaused = true;
     this.childControllers?.forEach((e) => e.pause());
     this.onPause();
-  }
-
-  resume() {
-    if (!this.myIsStarted) {
-      return;
-    }
-    this.onResume();
-    this.childControllers?.forEach((e) => e.resume());
-    this.myIsPaused = false;
   }
 
   end() {

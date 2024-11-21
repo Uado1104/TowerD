@@ -3,10 +3,10 @@ import { IGamePlayStrategyBase, TCommand, TStrategyDefine } from './commands';
 import { MultiPlayerStrategy } from './multiplayerStrategy';
 import { SinglePlayerStrategy } from './singlePlayerStrategy';
 
-export class GameStrategy {
+export class GameStrategyManager {
   private static myGameStrategy: IGamePlayStrategyBase | undefined;
 
-  static get gameStrategy() {
+  static get strategy() {
     if (!this.myGameStrategy) {
       throw new Error('GameStrategy not initialized');
     }
@@ -21,7 +21,7 @@ export class GameStrategy {
     this.myGameStrategy = undefined;
   }
 
-  static excute<T extends TCommand>(command: T, ...params: TEventHandleParams<TStrategyDefine[TCommand]>) {
-    this.gameStrategy.excute(command, ...params);
+  static excute<T extends TCommand>(command: T, ...params: TEventHandleParams<TStrategyDefine[T]>) {
+    this.strategy.excute(command, ...params);
   }
 }

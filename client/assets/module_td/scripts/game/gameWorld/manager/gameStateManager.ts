@@ -1,10 +1,8 @@
-import { EventDispatcher, TEventDefine } from '../../../core/events/eventSystem';
+import { EventDispatcher, TEventDefineType } from '../../../core/events/eventSystem';
 
-const gameStateEventDefine: TEventDefine = {
-  onRoundStart: () => {},
-  onRoundEnd: () => {},
-  onWaveStart: () => {},
-  onWaveEnd: () => {},
+const gameStateEventDefine = {
+  pause: () => {},
+  resume: () => {},
 };
 
 export class GamePlayStateManager {

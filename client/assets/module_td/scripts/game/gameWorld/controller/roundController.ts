@@ -1,11 +1,20 @@
 import { GameControllerBase } from '../../../core/controller/gameController';
-import { GameWaveController } from './waveController';
+import { BattleWaveController } from './battleWaveController';
+import { GameRecruitController } from './recruitController';
 
 export class GameRoundController extends GameControllerBase {
   readonly key = 'roundController';
 
-  constructor(childController = new GameWaveController()) {
-    super([childController]);
+  constructor(waveController = new BattleWaveController(), recruitController = new GameRecruitController()) {
+    super([recruitController, waveController]);
+  }
+
+  private get waveController(): BattleWaveController {
+    return this.childControllers[1] as BattleWaveController;
+  }
+
+  private get recruitController(): GameRecruitController {
+    return this.childControllers[0] as GameRecruitController;
   }
 
   protected onStart(): void {}

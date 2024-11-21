@@ -1,19 +1,20 @@
 import { DEvent } from '../../../core/events/DEvent';
-import { EventDispatcher, TEventDefine, TEventHandle, TEventHandleParams } from '../../../core/events/eventSystem';
+import { EventDispatcher, TEventDefineType, TEventHandle, TEventHandleParams } from '../../../core/events/eventSystem';
 import { TickSystem } from '../../../core/ticker/TickerSystem';
 
-export const gameCommandList = ['getSessionConfig'] as const;
+export const gameCommandList = ['startSession', 'getSessionConfig'] as const;
 
 export type TCommand = (typeof gameCommandList)[number];
 
 const gameplayStrategyDefine: Record<TCommand, TEventHandle> = {
+  startSession: () => {},
   getSessionConfig: (session: number) => {},
 };
 
 export type TStrategyDefine = typeof gameplayStrategyDefine;
 
-const gameStrategyEventDefine: TEventDefine = {
-  onRoundStart: () => {},
+const gameStrategyEventDefine = {
+  onRoundStart: (round: number) => {},
   onRoundEnd: () => {},
   onWaveStart: () => {},
   onWaveEnd: () => {},

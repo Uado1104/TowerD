@@ -1,4 +1,4 @@
-import { Logger } from "../../core/debugers/log";
+import { Logger } from '../../core/debugers/log';
 
 export class Module1 {
   constructor() {

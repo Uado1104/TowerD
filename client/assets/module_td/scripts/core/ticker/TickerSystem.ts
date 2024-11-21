@@ -7,7 +7,7 @@ import { ITickerManager, tickCallBackFunc } from './ITickerManager';
  * 心跳管理器
  */
 export class TickSystem {
-  static KEY = 'towerD.TickerManager';
+  static KEY = 'towerD.GameTickSystem';
 
   /**
    * 心跳驱动接口
