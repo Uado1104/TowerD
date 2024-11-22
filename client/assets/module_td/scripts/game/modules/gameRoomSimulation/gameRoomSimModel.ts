@@ -21,12 +21,19 @@ export class GameRoomSimModel {
     return produce(this.myData, (draft) => {});
   }
 
-  /** 抽一张卡 */
+  /** 换一批卡牌 */
   drawCard() {}
 
   /** 选择一张卡 */
   pickCard() {}
 
-  
+  enemyAliveCount = 0;
 
+  get CurrentBattleOver(): boolean {
+    return this.enemyAliveCount > 0;
+  }
+
+  waveLeft = 0;
+
+  roundLeft = 0;
 }

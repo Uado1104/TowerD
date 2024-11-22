@@ -90,6 +90,7 @@ export interface GameCardSim {
 export interface GameRelicSim {
   /** 圣物Id */
   relicId: number;
+  
 }
 
 export interface GameRoomSim {

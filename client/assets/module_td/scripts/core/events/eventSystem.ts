@@ -69,7 +69,7 @@ export class EventDispatcher<
     return handlers.has(handle);
   }
 
-  emit<T extends TEventType>(type: T, params: TEventHandleParams<TEventDefine[T]>): void {
+  emit<T extends TEventType>(type: T, ...params: TEventHandleParams<TEventDefine[T]>): void {
     const handles = this.handlesMap.get(type);
     if (!handles) {
       return;
