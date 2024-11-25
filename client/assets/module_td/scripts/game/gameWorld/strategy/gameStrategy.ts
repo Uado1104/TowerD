@@ -17,20 +17,13 @@ export class GameStrategyManager {
 
   static init(isSinglePlayer = true) {
     this.myGameStrategy = isSinglePlayer ? new SinglePlayerStrategy() : new MultiPlayerStrategy();
-    GameRoomSimulationManager.event.on('startRound', () => {});
-    GameRoomSimulationManager.event.on('startWave', () => {});
-    GameRoomSimulationManager.event.on('endWave', () => {});
   }
 
   static destroy() {
     this.myGameStrategy = undefined;
-    GameRoomSimulationManager.event.remove('startRound', () => {});
-    GameRoomSimulationManager.event.remove('startWave', () => {});
-    GameRoomSimulationManager.event.remove('endWave', () => {});
   }
 
-  private static onRoundStart() {
-  }
+  private static onRoundStart() {}
 
   private static onWaveStart() {}
 

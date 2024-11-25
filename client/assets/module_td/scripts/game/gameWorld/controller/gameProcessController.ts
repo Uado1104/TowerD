@@ -28,6 +28,8 @@ export class GameProcessController {
   }
 
   static stop() {
+    GamePlayStateManager.event.remove('pause', GameProcessController.onPause);
+    GamePlayStateManager.event.remove('resume', GameProcessController.onResume);
     TickSystem.RemoveTicker(GameProcessController.ticker);
     GameStrategyManager.destroy();
   }

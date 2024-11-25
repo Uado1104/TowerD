@@ -7,13 +7,9 @@ export class SinglePlayerStrategy extends IGamePlayStrategyBase {
   onHandleCommand(command: TCommand, ...params: TEventHandleParams<never>): void {
     Logger.log('SinglePlayerStrategy.onHandleCommand', `command: ${command}, params: ${params}`);
     switch (command) {
-      case 'getSessionConfig':
+      case 'startGame':
         Logger.log('SinglePlayerStrategy.getSessionConfig', params);
-        this.onGetSessionConfig(params);
-        break;
-      case 'startSession':
-        Logger.log('SinglePlayerStrategy.startSession', params);
-        this.onStartSession();
+        this.onStartGame();
         break;
       default:
         Logger.warn('SinglePlayerStrategy.onHandleCommand', `unknown command ${command}`);
@@ -21,15 +17,38 @@ export class SinglePlayerStrategy extends IGamePlayStrategyBase {
     }
   }
 
-  private onGetSessionConfig(session: number) {}
-
-  private onStartSession() {}
-
-  constructor() {
-    super();
+  private onRoundStart(round: number) {
+    this.event.emit('onRoundStart', round);
   }
 
-  init() {
+  private onEndRound() {
+    this.event.emit('onRoundEnd');
+  }
 
+  private onWaveStart() {
+    this.event.emit('onWaveStart');
+  }
+
+  private onWaveEnd() {
+    this.event.emit('onWaveEnd');
+  }
+
+  private onDrawCard() {
+    this.event.emit('onDrawCard');
+  }
+
+  private onEndDrawCard() {
+    this.event.emit('onEndDrawCard');
+  }
+
+  private onStartGame() {
+    GameRoomSimulationManager.event.on('startRound', this.onRoundStart.bind(this));
+    GameRoomSimulationManager.event.on('endRound', this.onEndRound.bind(this));
+    GameRoomSimulationManager.event.on('startWave', this.onWaveStart.bind(this));
+    GameRoomSimulationManager.event.on('endWave', this.onWaveEnd.bind(this));
+    GameRoomSimulationManager.event.on('startDrawCard', this.onDrawCard.bind(this));
+    GameRoomSimulationManager.event.on('endDrawCard', this.onEndDrawCard.bind(this));
+
+    GameRoomSimulationManager.start();
   }
 }

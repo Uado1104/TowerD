@@ -17,24 +17,7 @@ const gameRoomSimulatioEventDefine = {
   sessionOver: () => {},
 };
 
-class SessionTimer {
-  constructor() {}
-
-  time: number = 0;
-
-  startPhase() {}
-
-  startRound() {}
-
-  tick(dt: number) {
-    // 计时器逻辑
-    this.time += dt;
-  }
-}
-
-
 export class GameRoomSimulationManager {
-  
   private static model = new GameRoomSimModel();
 
   static readonly event = new EventDispatcher<typeof gameRoomSimulatioEventDefine>();
@@ -56,9 +39,9 @@ export class GameRoomSimulationManager {
     // 清理所有数据
   }
 
-  static isRunning = false;
+  private static isRunning = false;
 
-  static isBattle = false;
+  private static isBattle = false;
 
   static startSession() {
     // 开始回合
@@ -84,10 +67,6 @@ export class GameRoomSimulationManager {
       }
 
       GameRoomSimulationManager.isBattle = false;
-      GameRoomSimulationManager.event.emit('endWave');
-      if (GameRoomSimulationManager.moveToNextWave()) {
-        return;
-      }
       GameRoomSimulationManager.event.emit('endRound');
       GameRoomSimulationManager.moveToNextRound();
     },
@@ -95,18 +74,24 @@ export class GameRoomSimulationManager {
 
   static moveToNextWave(): boolean {
     // 移动到下一波
+    GameRoomSimulationManager.event.emit('endWave');
+
     if (GameRoomSimulationManager.model.waveLeft === 0) {
       return false;
     }
-    GameRoomSimulationManager.model.enemyAliveCount = 3;
+    GameRoomSimulationManager.model.enemyAliveCount += 3;
     GameRoomSimulationManager.model.waveLeft--;
     GameRoomSimulationManager.event.emit('startWave');
-    GameRoomSimulationManager.isBattle = true;
+    registerTimeoutTicker(() => {
+      GameRoomSimulationManager.moveToNextWave();
+    }, 1000 * 5);
     return true;
   }
 
   static moveToNextRound() {
     // 移动到下一回合
+    GameRoomSimulationManager.isBattle = false;
+
     if (GameRoomSimulationManager.model.roundLeft === 0) {
       GameRoomSimulationManager.isRunning = false;
       GameRoomSimulationManager.event.emit('sessionOver');
@@ -118,9 +103,11 @@ export class GameRoomSimulationManager {
     GameRoomSimulationManager.model.data.session.currentRound++;
     GameRoomSimulationManager.event.emit('startRound', GameRoomSimulationManager.model.data.session.currentRound);
     GameRoomSimulationManager.event.emit('startDrawCard');
+
     registerTimeoutTicker(() => {
       GameRoomSimulationManager.event.emit('endDrawCard');
       GameRoomSimulationManager.moveToNextWave();
-    }, 1000 * 5);
+      GameRoomSimulationManager.isBattle = true;
+    }, 1000 * 10);
   }
 }

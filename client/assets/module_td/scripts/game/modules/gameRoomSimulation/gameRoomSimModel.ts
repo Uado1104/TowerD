@@ -1,4 +1,3 @@
-import { produce } from 'immer';
 import { Logger } from '../../../core/debugers/log';
 import { GameRoomSim, GameSessionSim } from './gameRoomSimInterface';
 
@@ -18,7 +17,7 @@ export class GameRoomSimModel {
       Logger.error('GameRoomSimModel', 'data is undefined');
       throw new Error('data is undefined');
     }
-    return produce(this.myData, (draft) => {});
+    return this.myData;
   }
 
   /** 换一批卡牌 */
