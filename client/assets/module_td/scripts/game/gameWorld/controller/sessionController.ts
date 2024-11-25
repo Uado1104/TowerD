@@ -21,7 +21,7 @@ export class GameSessionController extends GameControllerBase {
   protected onTick(dt: number): void {}
 
   protected onStart(): void {
-    GameStrategyManager.strategy.event.on('onRoundStart', this.onRoundStart.bind(this));
+    GameStrategyManager.strategy.event.on('onRoundStart', this.onRoundStart);
     GameStrategyManager.strategy.event.on('onRoundEnd', this.onRoundEnd.bind(this));
     GameStrategyManager.strategy.event.on('onWaveStart', this.onWaveStart.bind(this));
     GameStrategyManager.strategy.event.on('onWaveEnd', this.onWaveEnd.bind(this));

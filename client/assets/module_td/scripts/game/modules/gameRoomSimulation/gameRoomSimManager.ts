@@ -23,7 +23,7 @@ export class GameRoomSimulationManager {
   static readonly event = new EventDispatcher<typeof gameRoomSimulatioEventDefine>();
 
   static start() {
-    Logger.log('GameServerSimulationManager', 'start');
+    Logger.log('GameRoomSimulationManager', 'start');
     // 将玩家数据以及回合数据传入，开启tick
     GameRoomSimulationManager.model.init(genDefaultGameRoomSim());
 
@@ -101,6 +101,7 @@ export class GameRoomSimulationManager {
     GameRoomSimulationManager.model.waveLeft = 3;
     GameRoomSimulationManager.model.roundLeft--;
     GameRoomSimulationManager.model.data.session.currentRound++;
+    Logger.log('GameRoomSimulationManager', `Round ${GameRoomSimulationManager.model.data.session.currentRound} start`);
     GameRoomSimulationManager.event.emit('startRound', GameRoomSimulationManager.model.data.session.currentRound);
     GameRoomSimulationManager.event.emit('startDrawCard');
 

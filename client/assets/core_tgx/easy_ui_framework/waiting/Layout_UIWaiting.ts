@@ -3,10 +3,9 @@ const { ccclass, property } = _decorator;
 
 @ccclass('tgxLayout_UIWaiting')
 export class Layout_UIWaiting extends Component {
-    @property(Node)
-    loadingIcon:Node;
+  @property(Node)
+  loadingIcon: Node;
 
-    @property(Label)
-    loadingTxt:Label;
+  @property(Label)
+  loadingTxt: Label;
 }
-

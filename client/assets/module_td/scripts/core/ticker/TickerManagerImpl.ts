@@ -1,3 +1,4 @@
+import { Logger } from '../debugers/log';
 import { ITicker } from './ITicker';
 import { ITickerManager, tickCallBackFunc } from './ITickerManager';
 
@@ -32,10 +33,10 @@ export class TickerManagerImpl implements ITickerManager {
       handler = this.__nextFrameCallBacks.shift()!;
       handler.callBack.apply(handler.caller);
     }
-    for (let index = 0; index < this.__tickerList.length; index++) {
-      const element = this.__tickerList[index];
+
+    this.__tickerList.forEach((element) => {
       element.Tick(dt);
-    }
+    });
   }
 
   addTicker(value: ITicker): void {

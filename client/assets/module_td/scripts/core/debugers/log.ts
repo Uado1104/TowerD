@@ -4,14 +4,17 @@ export function genTimeStamps() {
 
 export class Logger {
   static log(session: string, message: string) {
-    console.log(`[${genTimeStamps()}] [${session}] ${message}`);
+    const msg = `[${genTimeStamps()}] [${session}] ${message}`;
+    console.log(msg);
   }
 
   static error(session: string, message: string) {
-    console.error(`[${genTimeStamps()}] [${session}] ${message}`);
+    const msg = `[${genTimeStamps()}] [${session}] ${message}`;
+    console.error(msg);
   }
 
   static warn(session: string, message: string) {
-    console.warn(`[${genTimeStamps()}] [${session}] ${message}`);
+    const msg = `[${genTimeStamps()}] [${session}] ${message}`;
+    console.warn(msg);
   }
 }

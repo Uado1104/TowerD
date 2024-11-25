@@ -99,7 +99,7 @@ export class EventDispatcher<
           if (event.propagationStopped) {
             break;
           }
-          listener.handler.apply(event.data);
+          listener.handler(event.data);
         }
       }
       //事件退还

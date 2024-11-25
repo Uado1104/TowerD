@@ -1,6 +1,5 @@
 import {
   _decorator,
-  game,
   Prefab,
   isValid,
   Button,
@@ -9,7 +8,6 @@ import {
   Toggle,
   ToggleContainer,
   Node,
-  SkeletalAnimation,
   Component,
   EventTouch,
   Slider,

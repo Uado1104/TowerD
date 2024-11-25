@@ -139,9 +139,10 @@ export class LobbyMgr {
     return ret;
   }
 
+  announceText = '';
+
   async rpc_GetAnnouncement(type: string) {
-    const ret = await lobbyNet.callApi('lobby/GetAnnouncement', { type: type });
-    return ret;
+    return { isSucc: true, res: { content: this.announceText } };
   }
 
   async rpc_GetNotice() {

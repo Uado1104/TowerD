@@ -8,7 +8,7 @@ export class SinglePlayerStrategy extends IGamePlayStrategyBase {
     Logger.log('SinglePlayerStrategy.onHandleCommand', `command: ${command}, params: ${params}`);
     switch (command) {
       case 'startGame':
-        Logger.log('SinglePlayerStrategy.getSessionConfig', params);
+        Logger.log('SinglePlayerStrategy', 'startGame');
         this.onStartGame();
         break;
       default:
