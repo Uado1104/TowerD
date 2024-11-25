@@ -40,6 +40,10 @@ export class GameSessionController extends GameControllerBase {
     GameStrategyManager.strategy.event.remove('onEndDrawCard', this.onEndDrawCard.bind(this));
   }
 
+  killEnemy() {
+    GameStrategyManager.strategy.excute('killEnemy');
+  }
+
   private onRoundStart(round: number) {
     Logger.log('GameSessionController', `Round ${round} start`);
   }

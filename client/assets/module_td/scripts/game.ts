@@ -22,4 +22,9 @@ export class game extends Component {
   stop() {
     GameProcessController.stop();
   }
+
+  onKillEnemy() {
+    Logger.log('game', 'onKillEnemy');
+    GameProcessController.killEnemy();
+  }
 }

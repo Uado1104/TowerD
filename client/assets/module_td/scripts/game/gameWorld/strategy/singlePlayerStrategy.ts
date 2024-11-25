@@ -11,6 +11,10 @@ export class SinglePlayerStrategy extends IGamePlayStrategyBase {
         Logger.log('SinglePlayerStrategy', 'startGame');
         this.onStartGame();
         break;
+      case 'killEnemy':
+        Logger.log('SinglePlayerStrategy', 'killEnemy');
+        GameRoomSimulationManager.killEnemy();
+        break;
       default:
         Logger.warn('SinglePlayerStrategy.onHandleCommand', `unknown command ${command}`);
         break;

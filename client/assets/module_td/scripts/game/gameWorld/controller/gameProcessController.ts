@@ -33,4 +33,8 @@ export class GameProcessController {
     TickSystem.RemoveTicker(GameProcessController.ticker);
     GameStrategyManager.destroy();
   }
+
+  static killEnemy() {
+    GameProcessController.gameSessionController.killEnemy();
+  }
 }

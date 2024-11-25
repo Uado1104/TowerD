@@ -32,6 +32,11 @@ export class GameRoomSimulationManager {
     GameRoomSimulationManager.startSession();
   }
 
+  static killEnemy() {
+    Logger.log('GameRoomSimulationManager', ` killEnemy ${GameRoomSimulationManager.model.enemyAliveCount}`);
+    GameRoomSimulationManager.model.enemyAliveCount--;
+  }
+
   static stop() {
     Logger.log('GameServerSimulationManager', 'stop');
     // 停止tick
@@ -74,7 +79,6 @@ export class GameRoomSimulationManager {
 
   static moveToNextWave(): boolean {
     // 移动到下一波
-    GameRoomSimulationManager.event.emit('endWave');
 
     if (GameRoomSimulationManager.model.waveLeft === 0) {
       return false;
@@ -83,8 +87,9 @@ export class GameRoomSimulationManager {
     GameRoomSimulationManager.model.waveLeft--;
     GameRoomSimulationManager.event.emit('startWave');
     registerTimeoutTicker(() => {
+      GameRoomSimulationManager.event.emit('endWave');
       GameRoomSimulationManager.moveToNextWave();
-    }, 1000 * 5);
+    }, 5);
     return true;
   }
 
@@ -109,6 +114,6 @@ export class GameRoomSimulationManager {
       GameRoomSimulationManager.event.emit('endDrawCard');
       GameRoomSimulationManager.moveToNextWave();
       GameRoomSimulationManager.isBattle = true;
-    }, 1000 * 10);
+    }, 2);
   }
 }
