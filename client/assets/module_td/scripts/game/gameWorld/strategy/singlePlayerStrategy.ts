@@ -1,6 +1,7 @@
 import { Logger } from '../../../core/debugers/log';
 import { TEventHandleParams } from '../../../core/events/eventSystem';
 import { GameRoomSimulationManager } from '../../modules/gameRoomSimulation/gameRoomSimManager';
+import { GameModel } from '../model/gameModel';
 import { IGamePlayStrategyBase, TCommand } from './commands';
 
 export class SinglePlayerStrategy extends IGamePlayStrategyBase {
@@ -45,6 +46,10 @@ export class SinglePlayerStrategy extends IGamePlayStrategyBase {
     this.event.emit('onEndDrawCard');
   }
 
+  private onDataChanged(data: number) {
+    GameModel.data.proxy.EnemyAliveCount = data;
+  }
+
   private onStartGame() {
     GameRoomSimulationManager.event.on('startRound', this.onRoundStart.bind(this));
     GameRoomSimulationManager.event.on('endRound', this.onEndRound.bind(this));
@@ -52,7 +57,7 @@ export class SinglePlayerStrategy extends IGamePlayStrategyBase {
     GameRoomSimulationManager.event.on('endWave', this.onWaveEnd.bind(this));
     GameRoomSimulationManager.event.on('startDrawCard', this.onDrawCard.bind(this));
     GameRoomSimulationManager.event.on('endDrawCard', this.onEndDrawCard.bind(this));
-
+    GameRoomSimulationManager.event.on('enemyChanged', this.onDataChanged.bind(this));
     GameRoomSimulationManager.start();
   }
 }

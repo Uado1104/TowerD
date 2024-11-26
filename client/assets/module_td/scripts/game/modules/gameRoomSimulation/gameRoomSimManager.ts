@@ -15,6 +15,7 @@ const gameRoomSimulatioEventDefine = {
   startWave: () => {},
   endWave: () => {},
   sessionOver: () => {},
+  enemyChanged: (enemyCount: number) => {},
 };
 
 export class GameRoomSimulationManager {
@@ -35,6 +36,7 @@ export class GameRoomSimulationManager {
   static killEnemy() {
     Logger.log('GameRoomSimulationManager', ` killEnemy ${GameRoomSimulationManager.model.enemyAliveCount}`);
     GameRoomSimulationManager.model.enemyAliveCount--;
+    this.event.emit('enemyChanged', GameRoomSimulationManager.model.enemyAliveCount);
   }
 
   static stop() {

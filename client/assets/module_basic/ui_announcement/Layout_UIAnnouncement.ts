@@ -3,10 +3,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('Layout_UIAnnouncement')
 export class Layout_UIAnnouncement extends Component {
-    
-    @property(Node) maskNode:Node;
+  @property(Node) maskNode: Node;
 
-    @property(Label) lblContent:Label;
+  @property(Label) lblContent: Label;
 }
-
-
