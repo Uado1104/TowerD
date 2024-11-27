@@ -1,4 +1,4 @@
-import { _decorator, assetManager, Component, director, game, Label, Prefab, Node, profiler, Color } from 'cc';
+import { _decorator, assetManager, Component, director, game, Label, Prefab, Node, profiler, Color, de } from 'cc';
 import { GameUILayers, GameUILayerNames } from '../scripts/GameUILayers';
 
 import { ModuleDef } from '../scripts/ModuleDef';
@@ -80,7 +80,8 @@ export class Start extends Component {
     this._percent = ~~((this._numCurrentLoaded / _totalNum) * 100) + '%';
   }
 
-  preloadBundle(idx: number) {
+  preloadBundle(i: number) {
+    let idx = i;
     assetManager.loadBundle(_preloadBundles[idx], null, (err, bundle) => {
       console.log('module:<' + _preloadBundles[idx] + '>loaded.');
       idx++;
@@ -93,7 +94,8 @@ export class Start extends Component {
     });
   }
 
-  preloadRes(idx: number) {
+  preloadRes(i: number) {
+    let idx = i;
     const res = _preloadRes[idx];
     const bundle = assetManager.getBundle(res.bundle);
 
