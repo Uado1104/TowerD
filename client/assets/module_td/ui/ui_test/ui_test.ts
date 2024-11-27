@@ -1,23 +1,12 @@
-import { _decorator, Component, Node, Label } from 'cc';
-import { Logger } from '../../scripts/core/debugers/log';
-import { GameProcessController } from '../../scripts/game/gameWorld/controller/gameProcessController';
-import { GameModel } from '../../scripts/game/gameWorld/model/gameModel';
+import { _decorator, Component, Button, Label } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('ui_test')
 export class ui_test extends Component {
-  start() {
-    GameModel.data.addObserver('EnemyAliveCount', this.onEnenyNumberChanged);
-  }
+  @property(Button)
+  btnKillEneny: Button;
 
-  onClickKillEnemy() {
-    Logger.log('game', 'onKillEnemy');
-    GameProcessController.killEnemy();
-  }
-
-  onEnenyNumberChanged() {
-    const count = GameModel.data.proxy.EnemyAliveCount;
-    Logger.log('ui_test', `${count} enemies left`);
+  updateEnemyCount(count: number) {
     this.node.getChildByName('enemyCount').getComponent(Label).string = count.toString();
   }
 }

@@ -1,4 +1,4 @@
-import { _decorator, assetManager, Component, director, game, Label, Prefab, Node, profiler, Color, de } from 'cc';
+import { _decorator, assetManager, Component, director, game, Label, Prefab, Node, profiler, Color } from 'cc';
 import { GameUILayers, GameUILayerNames } from '../scripts/GameUILayers';
 
 import { ModuleDef } from '../scripts/ModuleDef';

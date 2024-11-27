@@ -30,7 +30,7 @@ export class ModuleContext {
   }
 
   public static getImplClass(cls) {
-    return cls[PROP_IMPL_CLASS] || cls;
+    return cls[PROP_IMPL_CLASS] ?? cls;
   }
 
   public static createFromModule(cls) {
