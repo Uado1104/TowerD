@@ -2,7 +2,7 @@ import { Asset, AssetManager, assetManager, Prefab } from 'cc';
 import { EUIPrefab, TResDefine, UIResDefine } from './define';
 import { Logger } from '../debugers/log';
 
-class ResourceManagerBase<AssetT extends typeof Asset, T extends string> {
+export class ResourceManagerBase<AssetT extends typeof Asset, T extends string> {
   private static readonly bundles: Map<string, AssetManager.Bundle> = new Map(); // 已加载的资源包
   private static readonly cache: Map<string, Asset> = new Map(); // 已缓存的资源
 
