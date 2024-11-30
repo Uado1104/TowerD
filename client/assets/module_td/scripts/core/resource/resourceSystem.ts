@@ -1,8 +1,8 @@
 import { Asset, AssetManager, assetManager, Prefab } from 'cc';
-import { EUIPrefab, TResDefine, UIResDefine } from './define';
+import { TResDefine } from './define';
 import { Logger } from '../debugers/log';
 
-export class ResourceManagerBase<AssetT extends typeof Asset, T extends string> {
+export class ResourceManager<AssetT extends typeof Asset, T extends string> {
   private static readonly bundles: Map<string, AssetManager.Bundle> = new Map(); // 已加载的资源包
   private static readonly cache: Map<string, Asset> = new Map(); // 已缓存的资源
 
@@ -20,8 +20,8 @@ export class ResourceManagerBase<AssetT extends typeof Asset, T extends string> 
    * @param bundleName 资源包名称
    */
   static async loadBundle(bundleName: string): Promise<AssetManager.Bundle> {
-    if (ResourceManagerBase.bundles.has(bundleName)) {
-      return ResourceManagerBase.bundles.get(bundleName)!;
+    if (ResourceManager.bundles.has(bundleName)) {
+      return ResourceManager.bundles.get(bundleName)!;
     }
     return new Promise((resolve, reject) => {
       assetManager.loadBundle(bundleName, (err, bundle) => {
@@ -29,7 +29,7 @@ export class ResourceManagerBase<AssetT extends typeof Asset, T extends string> 
           Logger.error('ResManager', `Failed to load bundle: ${bundleName} ${err}`);
           reject(err);
         } else {
-          ResourceManagerBase.bundles.set(bundleName, bundle);
+          ResourceManager.bundles.set(bundleName, bundle);
           Logger.log('ResManager', `Bundle loaded: ${bundleName}`);
           resolve(bundle);
         }
@@ -42,12 +42,12 @@ export class ResourceManagerBase<AssetT extends typeof Asset, T extends string> 
    * @param bundleName 资源包名称
    */
   static releaseBundle(bundleName: string): void {
-    if (!ResourceManagerBase.bundles.has(bundleName)) {
+    if (!ResourceManager.bundles.has(bundleName)) {
       return;
     }
-    const bundle = ResourceManagerBase.bundles.get(bundleName)!;
+    const bundle = ResourceManager.bundles.get(bundleName)!;
     bundle.releaseAll();
-    ResourceManagerBase.bundles.delete(bundleName);
+    ResourceManager.bundles.delete(bundleName);
     Logger.log('ResManager', `Bundle released: ${bundleName}`);
   }
 
@@ -62,13 +62,13 @@ export class ResourceManagerBase<AssetT extends typeof Asset, T extends string> 
       return;
     }
 
-    const cacheKey = ResourceManagerBase.genCacheKey(config.bundleName, config.path);
-    if (!ResourceManagerBase.cache.has(cacheKey)) {
+    const cacheKey = ResourceManager.genCacheKey(config.bundleName, config.path);
+    if (!ResourceManager.cache.has(cacheKey)) {
       return;
     }
-    const asset = ResourceManagerBase.cache.get(cacheKey);
+    const asset = ResourceManager.cache.get(cacheKey);
     assetManager.releaseAsset(asset!);
-    ResourceManagerBase.cache.delete(cacheKey);
+    ResourceManager.cache.delete(cacheKey);
     Logger.log('ResManager', `Resource released: ${cacheKey}`);
   }
 
@@ -83,15 +83,15 @@ export class ResourceManagerBase<AssetT extends typeof Asset, T extends string> 
       return;
     }
 
-    const cacheKey = ResourceManagerBase.genCacheKey(config.bundleName, config.path);
+    const cacheKey = ResourceManager.genCacheKey(config.bundleName, config.path);
 
     // 如果需要缓存并已存在缓存，则直接返回
-    if (config.cache && ResourceManagerBase.cache.has(cacheKey)) {
-      return ResourceManagerBase.cache.get(cacheKey) as unknown as AssetT;
+    if (config.cache && ResourceManager.cache.has(cacheKey)) {
+      return ResourceManager.cache.get(cacheKey) as unknown as AssetT;
     }
 
     // 加载资源包
-    const bundle = await ResourceManagerBase.loadBundle(config.bundleName);
+    const bundle = await ResourceManager.loadBundle(config.bundleName);
 
     // 加载资源
     return new Promise((resolve, reject) => {
@@ -103,23 +103,11 @@ export class ResourceManagerBase<AssetT extends typeof Asset, T extends string> 
           Logger.log('ResManager', `Resource loaded: ${cacheKey}`);
           // 如果需要缓存，则存储到缓存
           if (config.cache) {
-            ResourceManagerBase.cache.set(cacheKey, asset);
+            ResourceManager.cache.set(cacheKey, asset);
           }
           resolve(asset as unknown as AssetT);
         }
       });
     });
   }
-}
-
-export class ResourceManager {
-  static async loadBundle(bundleName: string): Promise<AssetManager.Bundle> {
-    return ResourceManagerBase.loadBundle(bundleName);
-  }
-
-  static releaseBundle(bundleName: string): void {
-    ResourceManagerBase.releaseBundle(bundleName);
-  }
-
-  static UI = new ResourceManagerBase<typeof Prefab, EUIPrefab>(UIResDefine, Prefab);
 }
