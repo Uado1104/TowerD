@@ -10,7 +10,7 @@ export class UIController {
 
   private static _controllers: UIController[];
 
-  static readonly event = new EventDispatcher<uiEventsDefine>();
+  static readonly event = new EventDispatcher<typeof uiEventsDefine>();
 
   /***
    * @en hide and destroy all ui panel.
@@ -27,7 +27,7 @@ export class UIController {
   private _instId = 0;
   private _prefab: string | Prefab;
   private _layer: number;
-  protected _layout: Component;
+  protected _layout: any;
   protected node: Node;
   protected _destroyed = false;
   protected _ingoreCloseAll = false;
