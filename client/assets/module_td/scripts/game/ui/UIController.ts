@@ -1,31 +1,6 @@
 import { _decorator, Prefab, isValid, Button, find, EventHandler, Node, Component, EventTouch, Slider } from 'cc';
-const { ccclass, property } = _decorator;
-/***
- * @en internal class, used for handling node event.
- * @zh 内部类，用于节点事件监听
- *
- *  */
-@ccclass('tgxNodeEventAgent')
-export class __NodeEventAgent__ extends Component {
-  /***
-   * @en recieve button click event and deliver them to the real handlers.
-   * @zh 接受按钮事件，并转发给真正的处理函数
-   * */
-  onButtonClicked(evt: EventTouch, customEventData) {
-    const btn = (evt.target as Node).getComponent(Button);
-    const clickEvents = btn.clickEvents;
-    for (let i = 0; i < clickEvents.length; ++i) {
-      const h = clickEvents[i];
-      if (h.customEventData == customEventData) {
-        const cb = h['$cb$'];
-        const target = h['$target$'];
-        const args = h['$args$'];
-        cb.apply(target, [btn, args]);
-      }
-    }
-  }
-}
-
+import { EventDispatcher } from '../../core/events/eventSystem';
+import { uiEventsDefine } from './uiDefine';
 /**
  * @en base class of UI Panel
  * @zh 各类UI面板基类
@@ -34,10 +9,25 @@ export class UIController {
   private static _idBase = 1000;
 
   private static _controllers: UIController[];
+
+  static readonly event = new EventDispatcher<uiEventsDefine>();
+
+  /***
+   * @en hide and destroy all ui panel.
+   * @zh 隐藏并销毁所有UI面板
+   *  */
+  static closeAll() {
+    UIController._controllers.forEach((c) => {
+      if (!c._ingoreCloseAll) {
+        c.close();
+      }
+    });
+  }
+
   private _instId = 0;
   private _prefab: string | Prefab;
   private _layer: number;
-  protected _layout: any;
+  protected _layout: Component;
   protected node: Node;
   protected _destroyed = false;
   protected _ingoreCloseAll = false;
@@ -81,18 +71,6 @@ export class UIController {
     return this._layout;
   }
 
-  /***
-   * @en hide and destroy all ui panel.
-   * @zh 隐藏并销毁所有UI面板
-   *  */
-  static closeAll() {
-    this._controllers.forEach((c) => {
-      if (!c._ingoreCloseAll) {
-        c.close();
-      }
-    });
-  }
-
   //update all ui, called by UIMgr.
   static updateAll(dt: number) {
     this._controllers.forEach((c) => {
@@ -103,7 +81,7 @@ export class UIController {
   }
 
   //setup this ui,called by UIMgr.
-  public setup(node: Node) {
+  setup(node: Node) {
     this.node = node;
 
     if (this._layout) {
@@ -122,7 +100,7 @@ export class UIController {
    * @en hide and destroy this ui panel.
    * @zh 隐藏并销毁此UI面板
    *  */
-  public close() {
+  close() {
     this._destroyed = true;
     const idx = UIController._controllers.indexOf(this);
     UIController._controllers.slice(idx, 1);
@@ -155,12 +133,6 @@ export class UIController {
       return null;
     }
 
-    //添加转发器
-    let agent = this.node.getComponent(__NodeEventAgent__);
-    if (!agent) {
-      agent = this.node.addComponent(__NodeEventAgent__);
-    }
-
     const btn = buttonNode.getComponent(Button);
     const clickEvents = btn.clickEvents;
     const handler = new EventHandler();
@@ -176,47 +148,6 @@ export class UIController {
 
     clickEvents.push(handler);
     btn.clickEvents = clickEvents;
-  }
-
-  /**
-   * @en remove button event handler
-   * @zh 移除按钮事件
-   * @param relativeNodePath to indicate a button node, can pass `string`|`Node`|`Button` here.
-   * @param cb will be called when event emits.
-   * @param target the `this` argument of `cb`
-   *  */
-  offButtonEvent(relativeNodePath: string | Node | Button, cb: () => void, target: any) {
-    let buttonNode: Node = null;
-    if (relativeNodePath instanceof Node) {
-      buttonNode = relativeNodePath;
-    } else if (relativeNodePath instanceof Button) {
-      buttonNode = relativeNodePath.node;
-    } else {
-      buttonNode = find(relativeNodePath, this.node);
-    }
-
-    if (!buttonNode) {
-      return;
-      ``;
-    }
-
-    const agent = this.node.getComponent(__NodeEventAgent__);
-    if (!agent) {
-      return;
-    }
-    const btn = buttonNode.getComponent(Button);
-    if (!btn) {
-      return;
-    }
-    const clickEvents = btn.clickEvents;
-    for (let i = 0; i < clickEvents.length; ++i) {
-      const h = clickEvents[i];
-      if (h['$cb$'] == cb && h['$target$'] == target) {
-        clickEvents.splice(i, 1);
-        btn.clickEvents = clickEvents;
-        break;
-      }
-    }
   }
 
   /***

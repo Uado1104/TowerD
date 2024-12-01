@@ -1,9 +1,22 @@
 import { Prefab, UITransform, Node, Widget, instantiate, director, AssetManager } from 'cc';
 import { ResourceManager } from '../../core/resource/resourceSystem';
-import { EUIPrefab, UIResDefine } from './uiDefine';
+import { EUIPrefab, getUIClsDefine, getUIResDefine, UIResDefine } from './uiDefine';
 import { ITicker } from '../../core/ticker/ITicker';
 import { UIController } from './UIController';
 import { TickSystem } from '../../core/ticker/TickerSystem';
+import { UiTestController } from './uiTestController';
+
+function createUiContext(type: EUIPrefab): UIController {
+  const prefab = UIResDefine[type].path;
+  const { layer, layerCls } = getUIClsDefine(type);
+
+  switch (type) {
+    case EUIPrefab.test:
+      return new UiTestController(prefab, layer, layerCls);
+    default:
+      throw new Error(`unknown ui type ${type}`);
+  }
+}
 
 /**
  * 注册ui的controller以及对应的prefab位置，controller主要用于处理ui的逻辑，prefab主要用于ui的显示
@@ -13,7 +26,7 @@ export class UIMgr extends ResourceManager<typeof Prefab, EUIPrefab> {
 
   static get instance() {
     if (UIMgr.myInstance == null) {
-      UIMgr.myInstance = new UIMgr(UIResDefine, Prefab);
+      UIMgr.myInstance = new UIMgr();
     }
     return UIMgr.myInstance;
   }
@@ -24,8 +37,8 @@ export class UIMgr extends ResourceManager<typeof Prefab, EUIPrefab> {
     },
   };
 
-  private constructor(resDefine, resType) {
-    super(resDefine, resType);
+  private constructor() {
+    super(UIResDefine, Prefab);
   }
 
   private _uiCanvas: Node;
@@ -112,7 +125,7 @@ export class UIMgr extends ResourceManager<typeof Prefab, EUIPrefab> {
   async showUI(name: EUIPrefab): Promise<void> {
     await this.load(name);
 
-    const ui = ModuleContext.createFromModule(uiCls) as UIController;
+    const ui = createUiContext(name);
     const resArr = ui.getRes() || [];
     if (typeof ui.prefab == 'string') {
       resArr.push(ui.prefab as never);
@@ -139,11 +152,11 @@ export class UIMgr extends ResourceManager<typeof Prefab, EUIPrefab> {
         parent.addChild(node);
         ui.setup(node);
       });
-      return ui;
+      return ui;K
     };
 
-    bundleName = bundleName || 'resources';
-    const bundle = assetManager.getBundle(bundleName);
+    const bundleName = getUIResDefine(name).bundleName;
+    const bundle = ResourceManager.;
     return fnLoadAndCreateFromBundle(bundle);
   }
 }
