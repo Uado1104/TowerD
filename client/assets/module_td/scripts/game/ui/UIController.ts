@@ -1,6 +1,7 @@
-import { _decorator, Prefab, isValid, Button, find, EventHandler, Node, Component, EventTouch, Slider } from 'cc';
+import { Prefab, isValid, Node, Component } from 'cc';
 import { EventDispatcher } from '../../core/events/eventSystem';
 import { uiEventsDefine } from './uiDefine';
+
 /**
  * @en base class of UI Panel
  * @zh 各类UI面板基类
@@ -8,7 +9,15 @@ import { uiEventsDefine } from './uiDefine';
 export class UIController {
   private static _idBase = 1000;
 
-  private static _controllers: UIController[];
+  private static myControllerMap: Map<typeof UIController, UIController> = new Map();
+
+  static getController<T extends UIController>(cls: typeof UIController): T {
+    return UIController.myControllerMap.get(cls) as T;
+  }
+
+  static getControllerById<T extends UIController>(instId: number): T {
+    return Array.from(UIController.myControllerMap.values()).find((c) => c.instId === instId) as T;
+  }
 
   static readonly event = new EventDispatcher<typeof uiEventsDefine>();
 
@@ -17,7 +26,7 @@ export class UIController {
    * @zh 隐藏并销毁所有UI面板
    *  */
   static closeAll() {
-    UIController._controllers.forEach((c) => {
+    UIController.myControllerMap.forEach((c) => {
       if (!c._ingoreCloseAll) {
         c.close();
       }
@@ -27,16 +36,17 @@ export class UIController {
   private _instId = 0;
   private _prefab: string | Prefab;
   private _layer: number;
-  protected _layout: any;
+  private _layoutCls: typeof Component;
+  protected _layout: Component;
   protected node: Node;
   protected _destroyed = false;
   protected _ingoreCloseAll = false;
-  constructor(prefab: string | Prefab, layer: number, layoutCls: any) {
+  constructor(prefab: string | Prefab, layer: number, layoutCls: typeof Component, myCls: typeof UIController) {
     this._prefab = prefab;
     this._layer = layer;
-    this._layout = layoutCls;
+    this._layoutCls = layoutCls;
     this._instId = UIController._idBase++;
-    UIController._controllers.push(this);
+    UIController.myControllerMap.set(myCls, this);
   }
 
   /***
@@ -73,7 +83,7 @@ export class UIController {
 
   //update all ui, called by UIMgr.
   static updateAll(dt: number) {
-    this._controllers.forEach((c) => {
+    this.myControllerMap.forEach((c) => {
       if (c.node && isValid(c.node)) {
         c.onUpdate(dt);
       }
@@ -85,8 +95,9 @@ export class UIController {
     this.node = node;
 
     if (this._layout) {
-      this._layout = this.node.getComponent(this._layout);
+      this._layout = this.node.getComponent(this._layoutCls);
     }
+
     //notify sub class to handle something.
     //节点创建完毕，调用子类的处理函数。
     this.onCreated();
@@ -102,52 +113,18 @@ export class UIController {
    *  */
   close() {
     this._destroyed = true;
-    const idx = UIController._controllers.indexOf(this);
-    UIController._controllers.slice(idx, 1);
-    if (this.node) {
-      this.node.removeFromParent();
-      this.onDispose();
-      this.node.destroy();
-      this.node = null;
+    const idx = UIController.getControllerById(this._instId);
+    if (!idx) {
+      return;
     }
-  }
-
-  /**
-   * @en add button event handler
-   * @zh 添加按钮事件
-   * @param relativeNodePath to indicate a button node, can pass `string`|`Node`|`Button` here.
-   * @param cb will be called when event emits. method format:(btn:Button,args:any)=>void
-   * @param target the `this` argument of `cb`
-   *  */
-  onButtonEvent(relativeNodePath: string | Node | Button, cb: () => void, target?: any, args?: any) {
-    let buttonNode: Node = null;
-    if (relativeNodePath instanceof Node) {
-      buttonNode = relativeNodePath;
-    } else if (relativeNodePath instanceof Button) {
-      buttonNode = relativeNodePath.node;
-    } else {
-      buttonNode = find(relativeNodePath, this.node);
+    UIController.myControllerMap.delete(idx.constructor as typeof UIController);
+    if (!this.node) {
+      return;
     }
-
-    if (!buttonNode) {
-      return null;
-    }
-
-    const btn = buttonNode.getComponent(Button);
-    const clickEvents = btn.clickEvents;
-    const handler = new EventHandler();
-    handler.target = this.node;
-    handler.component = 'tgxNodeEventAgent';
-    handler.handler = 'onButtonClicked';
-    handler.customEventData = '' + UIController._idBase++;
-
-    //附加额外信息 供事件转发使用
-    handler['$cb$'] = cb;
-    handler['$target$'] = target;
-    handler['$args$'] = args;
-
-    clickEvents.push(handler);
-    btn.clickEvents = clickEvents;
+    this.node.removeFromParent();
+    this.onDispose();
+    this.node.destroy();
+    this.node = null;
   }
 
   /***
@@ -158,10 +135,14 @@ export class UIController {
     return [];
   }
 
-  //子类的所有操作，需要在这个函数之后。
-  protected onCreated(params?: any) {}
-  //销毁
+  /***
+   * @zh 节点创建时调用
+   *  */
+  protected onCreated() {}
+
+  /** 销毁 */
   protected onDispose() {}
-  //
+
+  /** 更新 */
   protected onUpdate(dt: number) {}
 }

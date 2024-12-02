@@ -1,27 +1,14 @@
-import { Prefab, UITransform, Node, Widget, instantiate, director, AssetManager } from 'cc';
+import { Prefab, UITransform, Node, Widget, instantiate, director } from 'cc';
 import { ResourceManager } from '../../core/resource/resourceSystem';
-import { EUIPrefab, getUIClsDefine, getUIResDefine, UIResDefine } from './uiDefine';
+import { EUIPrefab, getUIResDefine, UIResDefine } from './uiDefine';
 import { ITicker } from '../../core/ticker/ITicker';
 import { UIController } from './UIController';
 import { TickSystem } from '../../core/ticker/TickerSystem';
-import { UiTestController } from './uiTestController';
-
-function createUiContext(type: EUIPrefab): UIController {
-  const prefab = UIResDefine[type].path;
-  const { layer, layerCls } = getUIClsDefine(type);
-
-  switch (type) {
-    case EUIPrefab.test:
-      return new UiTestController(prefab, layer, layerCls);
-    default:
-      throw new Error(`unknown ui type ${type}`);
-  }
-}
 
 /**
  * 注册ui的controller以及对应的prefab位置，controller主要用于处理ui的逻辑，prefab主要用于ui的显示
  */
-export class UIMgr extends ResourceManager<typeof Prefab, EUIPrefab> {
+export class UIMgr extends ResourceManager<Prefab, EUIPrefab> {
   private static myInstance = null;
 
   static get instance() {
@@ -122,41 +109,16 @@ export class UIMgr extends ResourceManager<typeof Prefab, EUIPrefab> {
    * @param thisArg the this argument for param `cb`.
    * @returns the instance of `uiCls`
    *  */
-  async showUI(name: EUIPrefab): Promise<void> {
-    await this.load(name);
+  async showUI(type: EUIPrefab): Promise<UIController> {
+    const prefabAsset = await this.load(type);
+    const prefab = UIResDefine[type].path;
+    const { layer, controllerCls, layerCls } = getUIResDefine(type);
+    const ctl = new controllerCls(prefab, layer, layerCls, controllerCls);
+    const node = prefabAsset ? instantiate(prefabAsset as Prefab) : this.createFullScreenNode();
+    ctl.setup(node);
+    const parent = this.getLayerNode(layer);
+    parent.addChild(node);
 
-    const ui = createUiContext(name);
-    const resArr = ui.getRes() || [];
-    if (typeof ui.prefab == 'string') {
-      resArr.push(ui.prefab as never);
-    }
-
-    const fnLoadAndCreateFromBundle = (bundle: AssetManager.Bundle) => {
-      bundle.load(resArr, (err, data) => {
-        if (err) {
-          console.log(err);
-        }
-        let node: Node = null;
-        let prefab: Prefab = ui.prefab as Prefab;
-        if (typeof ui.prefab == 'string') {
-          prefab = bundle.get(ui.prefab) as Prefab;
-        }
-        if (prefab) {
-          node = instantiate(prefab);
-        } else {
-          //special for empty ui
-          node = this.createFullScreenNode();
-        }
-
-        const parent = UIMgr.instance.getLayerNode(ui.layer);
-        parent.addChild(node);
-        ui.setup(node);
-      });
-      return ui;K
-    };
-
-    const bundleName = getUIResDefine(name).bundleName;
-    const bundle = ResourceManager.;
-    return fnLoadAndCreateFromBundle(bundle);
+    return ctl;
   }
 }

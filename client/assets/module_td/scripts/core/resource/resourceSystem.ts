@@ -2,7 +2,7 @@ import { Asset, AssetManager, assetManager, Prefab } from 'cc';
 import { TResDefine } from './define';
 import { Logger } from '../debugers/log';
 
-export class ResourceManager<AssetT extends typeof Asset, T extends string> {
+export class ResourceManager<AssetT extends Asset, T extends string> {
   private static readonly bundles: Map<string, AssetManager.Bundle> = new Map(); // 已加载的资源包
   private static readonly cache: Map<string, Asset> = new Map(); // 已缓存的资源
 
@@ -12,7 +12,7 @@ export class ResourceManager<AssetT extends typeof Asset, T extends string> {
 
   constructor(
     private readonly resDefine: TResDefine<T>,
-    private readonly resType: AssetT,
+    private readonly resType: typeof Asset,
   ) {}
 
   /**
@@ -76,7 +76,7 @@ export class ResourceManager<AssetT extends typeof Asset, T extends string> {
    * 加载资源
    * @param resourceEnum 资源枚举
    */
-  async load(resourceEnum: T): Promise<AssetT> {
+  async load(resourceEnum: T): Promise<Asset> {
     const config = this.resDefine[resourceEnum];
     if (!config) {
       Logger.error('ResManager', `Resource configuration not found for: ${resourceEnum}`);
@@ -95,7 +95,7 @@ export class ResourceManager<AssetT extends typeof Asset, T extends string> {
 
     // 加载资源
     return new Promise((resolve, reject) => {
-      bundle.load(config.path, this.resType, (err, asset) => {
+      bundle.load([config.path], this.resType, (err, assets) => {
         if (err) {
           Logger.error('ResManager', `Failed to load resource: ${cacheKey} ${err}`);
           reject(err);
@@ -103,9 +103,9 @@ export class ResourceManager<AssetT extends typeof Asset, T extends string> {
           Logger.log('ResManager', `Resource loaded: ${cacheKey}`);
           // 如果需要缓存，则存储到缓存
           if (config.cache) {
-            ResourceManager.cache.set(cacheKey, asset);
+            ResourceManager.cache.set(cacheKey, assets[0]);
           }
-          resolve(asset as unknown as AssetT);
+          resolve(assets[0] as AssetT);
         }
       });
     });

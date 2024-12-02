@@ -1,37 +1,31 @@
-import { Button } from 'cc';
-import { ui_test } from '../../../ui/ui_test/ui_test';
-import { ResourceConfig, TResDefine } from '../../core/resource/define';
+import { Button, Component } from 'cc';
+import { ResourceConfig } from '../../core/resource/define';
+import { UIController } from './UIController';
+import { UiTestController } from './uiTestController';
+
+export interface UIResourceConfig extends ResourceConfig {
+  controllerCls: typeof UIController;
+  layerCls: typeof Component;
+  layer: number;
+}
 
 export enum EUIPrefab {
   test = 'test',
 }
 
-export const UIResDefine: TResDefine<EUIPrefab> = {
+export const UIResDefine: Record<EUIPrefab, UIResourceConfig> = {
   test: {
     bundleName: 'module_td',
     path: 'prefabs/test',
     cache: true,
-  },
-};
-
-export function getUIResDefine(type: EUIPrefab): ResourceConfig {
-  return UIResDefine[type];
-}
-
-export interface UIClsDefine {
-  layer: number;
-  layerCls: any;
-}
-
-export const UIClsDefine: Record<EUIPrefab, UIClsDefine> = {
-  test: {
     layer: 1,
+    controllerCls: UiTestController,
     layerCls: Button,
   },
 };
 
-export function getUIClsDefine(type: EUIPrefab): UIClsDefine {
-  return UIClsDefine[type];
+export function getUIResDefine(type: EUIPrefab): UIResourceConfig {
+  return UIResDefine[type];
 }
 
 export const uiEventsDefine = {
