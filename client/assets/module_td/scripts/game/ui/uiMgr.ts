@@ -1,6 +1,6 @@
 import { Prefab, UITransform, Node, Widget, instantiate, director } from 'cc';
 import { ResourceManager } from '../../core/resource/resourceSystem';
-import { EUIPrefab, getUIResDefine, UIResDefine } from './uiDefine';
+import { TUIPrefab, getUIResDefine, UIResDefine } from './uiDefine';
 import { ITicker } from '../../core/ticker/ITicker';
 import { UIController } from './UIController';
 import { TickSystem } from '../../core/ticker/TickerSystem';
@@ -8,10 +8,10 @@ import { TickSystem } from '../../core/ticker/TickerSystem';
 /**
  * 注册ui的controller以及对应的prefab位置，controller主要用于处理ui的逻辑，prefab主要用于ui的显示
  */
-export class UIMgr extends ResourceManager<Prefab, EUIPrefab> {
+export class UIMgr extends ResourceManager<Prefab, TUIPrefab> {
   private static myInstance = null;
 
-  static get instance() {
+  static get instance(): UIMgr {
     if (UIMgr.myInstance == null) {
       UIMgr.myInstance = new UIMgr();
     }
@@ -109,7 +109,7 @@ export class UIMgr extends ResourceManager<Prefab, EUIPrefab> {
    * @param thisArg the this argument for param `cb`.
    * @returns the instance of `uiCls`
    *  */
-  async showUI(type: EUIPrefab): Promise<UIController> {
+  async showUI(type: TUIPrefab): Promise<UIController> {
     const prefabAsset = await this.load(type);
     const prefab = UIResDefine[type].path;
     const { layer, controllerCls, layerCls } = getUIResDefine(type);

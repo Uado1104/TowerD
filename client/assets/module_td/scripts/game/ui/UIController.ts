@@ -1,7 +1,33 @@
-import { Prefab, isValid, Node, Component } from 'cc';
+import { Prefab, isValid, Node, Component, _decorator, EventTouch, Button, EventHandler } from 'cc';
 import { EventDispatcher } from '../../core/events/eventSystem';
 import { uiEventsDefine } from './uiDefine';
+const { ccclass, property } = _decorator;
 
+/***
+ * @en internal class, used for handling node event.
+ * @zh 内部类，用于节点事件监听
+ *
+ *  */
+@ccclass('tgxNodeEventAgent')
+export class __NodeEventAgent__ extends Component {
+  /***
+   * @en recieve button click event and deliver them to the real handlers.
+   * @zh 接受按钮事件，并转发给真正的处理函数
+   * */
+  onButtonClicked(evt: EventTouch, customEventData) {
+    const btn = (evt.target as Node).getComponent(Button);
+    const clickEvents = btn.clickEvents;
+    for (let i = 0; i < clickEvents.length; ++i) {
+      const h = clickEvents[i];
+      if (h.customEventData == customEventData) {
+        const cb = h['$cb$'];
+        const target = h['$target$'];
+        const args = h['$args$'];
+        cb.apply(target, [btn, args]);
+      }
+    }
+  }
+}
 /**
  * @en base class of UI Panel
  * @zh 各类UI面板基类
@@ -73,14 +99,6 @@ export class UIController {
     return this._layer;
   }
 
-  /***
-   * @en layout of this ui panel.
-   * @zh 本UI所在的UI层级
-   *  */
-  getLayout(): any {
-    return this._layout;
-  }
-
   //update all ui, called by UIMgr.
   static updateAll(dt: number) {
     this.myControllerMap.forEach((c) => {
@@ -94,7 +112,7 @@ export class UIController {
   setup(node: Node) {
     this.node = node;
 
-    if (this._layout) {
+    if (!this._layout) {
       this._layout = this.node.getComponent(this._layoutCls);
     }
 
@@ -131,8 +149,42 @@ export class UIController {
    * @en the extra resource needed by this ui panel.the ui will not be created until these res loaded.
    * @zh 本UI使用的依赖资源.UI会等这些资源加载完成后才创建。
    *  */
-  public getRes(): [] {
+  getRes(): [] {
     return [];
+  }
+
+  onButtonEvent(relativeNodePath: string | Node | Button, cb: () => void, target?: UIController) {
+    let buttonNode: Node = null;
+    if (relativeNodePath instanceof Node) {
+      buttonNode = relativeNodePath;
+    } else if (relativeNodePath instanceof Button) {
+      buttonNode = relativeNodePath.node;
+    }
+
+    if (!buttonNode) {
+      return null;
+    }
+
+    //添加转发器
+    let agent = this.node.getComponent(__NodeEventAgent__);
+    if (!agent) {
+      agent = this.node.addComponent(__NodeEventAgent__);
+    }
+
+    const btn = buttonNode.getComponent(Button);
+    const clickEvents = btn.clickEvents;
+    const handler = new EventHandler();
+    handler.target = this.node;
+    handler.component = 'tgxNodeEventAgent';
+    handler.handler = 'onButtonClicked';
+    handler.customEventData = '' + UIController._idBase++;
+
+    //附加额外信息 供事件转发使用
+    handler['$cb$'] = cb;
+    handler['$target$'] = target;
+
+    clickEvents.push(handler);
+    btn.clickEvents = clickEvents;
   }
 
   /***
